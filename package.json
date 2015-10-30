@@ -1,0 +1,22 @@
+{
+  "name": "nyoki-nyoki",
+  "version": "1.0.0",
+  "description": "",
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/haseaki0503/nyoki-nyoki.git"
+  },
+  "author": {
+    "name": "haseaki0503",
+    "email": "contact@haseaki.com"
+  },
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/haseaki0503/nyoki-nyoki/issues"
+  },
+  "homepage": "https://github.com/haseaki0503/nyoki-nyoki#readme",
+  "devDependencies": {
+    "node-osc": "^1.1.0",
+    "socket.io": "^1.3.7"
+  }
+}
