@@ -1,12 +1,14 @@
 var osc = require('node-osc'),
-    app = require('http').createServer(handler),
-    io  = require('socket.io').listen(app),
-    fs  = require('fs');
+    express = require('express'),
+    app = express(),
+    server = require('http').Server(app),
+    io = require('socket.io')(server);
 
 io.set('log level', 1);
 
-//start listening
-app.listen(3000);
+//server
+server.listen(3000);
+app.use(express.static('public'));
 
 //OSC
 //var oscAddr = '192.168.152.49';
@@ -14,26 +16,15 @@ var oscAddr = '127.0.0.1';
 var oscServer = new osc.Server(10001, oscAddr);
 var oscClient = new osc.Client(oscAddr, 10000);
 
-//http
-function handler(req, res) {
-  fs.readFile(__dirname + '/public/index.html', function(err, data) {
-    if (err) {
-      res.writeHead(500);
-      return res.end('Error');
-    }
-    res.writeHead(200);
-    res.write(data);
-    res.end();
-  })
-}
-
 //socket
+var mode = 'none';
 io.sockets.on('connection', function(socket) {
   //mode
   socket.on('config', function(data) {
+    mode = data;
     oscClient.send('/config', data);
-    console.log(data);
-  })
+    console.log('config: ' + data);
+  });
   //graph
   socket.on('emit_graph', function(data) {
     oscClient.send('/graph', data);
@@ -56,7 +47,11 @@ io.sockets.on('connection', function(socket) {
   });
 });
 
-oscServer.on('message', function(msg, rinfo) {
-  console.log('[Incoming msg] ' + 'address:' + msg[2][0] + ' msg:' + msg[2][1]);
+var msg, addr;
+oscServer.on('message', function(obj, rinfo) {
+  socket.emit('')
+  msg = obj[2][1];
+  addr = obj[2][0];
+  console.log('[Incoming msg] ' + 'address:' + addr + ' msg:' + msg);
   console.log(rinfo);
 });
