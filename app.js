@@ -17,9 +17,11 @@ var oscServer = new osc.Server(10001, oscAddr);
 var oscClient = new osc.Client(oscAddr, 10000);
 
 //socket
+var mode = 'none';
 io.sockets.on('connection', function(socket) {
   //mode
   socket.on('config', function(data) {
+    mode = data;
     oscClient.send('/config', data);
     console.log('config: ' + data);
   });
@@ -45,7 +47,11 @@ io.sockets.on('connection', function(socket) {
   });
 });
 
-oscServer.on('message', function(msg, rinfo) {
-  console.log('[Incoming msg] ' + 'address:' + msg[2][0] + ' msg:' + msg[2][1]);
+var msg, addr;
+oscServer.on('message', function(obj, rinfo) {
+  socket.emit('')
+  msg = obj[2][1];
+  addr = obj[2][0];
+  console.log('[Incoming msg] ' + 'address:' + addr + ' msg:' + msg);
   console.log(rinfo);
 });
