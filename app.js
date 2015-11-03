@@ -11,8 +11,8 @@ server.listen(3000);
 app.use(express.static('public'));
 
 //OSC
-//var oscAddr = '192.168.152.49';
-var oscAddr = '127.0.0.1';
+var oscAddr = '192.168.152.49';
+//var oscAddr = '127.0.0.1';
 var oscServer = new osc.Server(10001, oscAddr);
 var oscClient = new osc.Client(oscAddr, 10000);
 
@@ -28,32 +28,28 @@ io.sockets.on('connection', function(socket) {
   //graph
   socket.on('emit_graph', function(data) {
     oscClient.send('/graph', data);
-    console.log(data);
+    console.log("graph: " + data);
   });
   //calc
   socket.on('emit_calc', function(data) {
     oscClient.send('/calc', data);
-    console.log(data);
+    console.log("calc: " + data);
   });
   //timer
   socket.on('emit_timer', function(data) {
     oscClient.send('/timer', data);
-    console.log(data);
+    console.log("timer: " + data);
   });
   //visualizer
   socket.on('emit_visualizer', function(data) {
     oscClient.send('/visualizer', data);
-    console.log(data);
+    console.log('visualizer: ' + data);
   });
-  socket.on('num-music', function(data) {
-    oscClient.send('/num-music', data);
-    console.log('num-music: ' + data);
-  })
 });
 
 var msg, addr;
 oscServer.on('message', function(obj, rinfo) {
-  socket.emit('')
+  // socket.emit('')
   msg = obj[2][1];
   addr = obj[2][0];
   console.log('[Incoming msg] ' + 'address:' + addr + ' msg:' + msg);
