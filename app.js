@@ -45,6 +45,10 @@ io.sockets.on('connection', function(socket) {
     oscClient.send('/visualizer', data);
     console.log(data);
   });
+  socket.on('num-music', function(data) {
+    oscClient.send('/num-music', data);
+    console.log('num-music: ' + data);
+  })
 });
 
 var msg, addr;
