@@ -45,13 +45,17 @@ io.sockets.on('connection', function(socket) {
     oscClient.send('/visualizer', data);
     console.log('visualizer: ' + data);
   });
-});
 
-var msg, addr;
-oscServer.on('message', function(obj, rinfo) {
-  // socket.emit('')
-  msg = obj[2][1];
-  addr = obj[2][0];
-  console.log('[Incoming msg] ' + 'address:' + addr + ' msg:' + msg);
-  console.log(rinfo);
+  //oscServer
+  var msg, addr;
+  oscServer.on('message', function(obj, rinfo) {
+    msg = obj[2][1];
+    addr = obj[2][0];
+    console.log('[Incoming msg] ' + 'address:' + addr + ' msg:' + msg);
+    //console.log(rinfo);
+    if (addr = '/timer') {
+      socket.emit('send_time', msg);
+      console.log('time: ' + msg);
+    }
+  });
 });

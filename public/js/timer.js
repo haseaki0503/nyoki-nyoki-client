@@ -1,4 +1,5 @@
 var timerMin=0, timerSec=0;
+var socket = io.connect();
 
 $('.min-timer > img').click(function(){
   var index = $(this).index();
@@ -23,7 +24,14 @@ $('.sec-timer > img').click(function(){
 });
 
 $('.start').click(function(){
-  var socket = io.connect();
   socket.emit('emit_timer', timerMin * 60 + timerSec);
   console.log('start!', timerMin * 60, timerSec);
+});
+
+socket.on('send_time', function (data) {
+  timerMin = Math.floor(data / 60);
+  timerSec = data % 60;
+  $('.min-timer p').text(timerMin);
+  $('.sec-timer p').text(timerSec);
+  console.log(data);
 });
