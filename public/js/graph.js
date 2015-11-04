@@ -4,15 +4,18 @@ $('.main').on('touchend', onTouchEnd);
 var position=[], diff=[], graphValue=[], maxHeight, barHeight, nyokiRow=0;
 var socket = io.connect();
 
+socket.emit('config', 'graph');
+
 //init
 for (i=0; i < 9; i++) {
 	graphValue[i] = 40;
+	socket.emit('emit_graph', i+1 + " " + graphValue[i]);
 }
 
 $('.waku').click(function(){
 	nyokiRow = $(this).index();
 	for(i=1; i <= 3; i++) {
-		index = i + 3*nyokiRow -1;
+		index = i + 3*nyokiRow - 1;
 		$('.bar').eq(i-1).height(graphValue[index] * maxHeight / 50);
 		$('.value-box').eq(i-1).children('p').text(graphValue[index]);
 
