@@ -1,6 +1,6 @@
-$('.bar-box').on('touchstart', onTouchStart);
-$('.bar-box').on('touchmove', onTouchMove);
-$('.main').on('touchend', onTouchEnd);
+$('.bar-box').on('touchstart ondragstart', onTouchStart);
+$('.bar-box').on('touchmove ondrag', onTouchMove);
+$('.main').on('touchend ondragend', onTouchEnd);
 var position=[], diff=[], graphValue=[], maxHeight, barHeight, nyokiRow=0;
 var socket = io.connect();
 
@@ -23,7 +23,7 @@ $('.waku').click(function(){
 	}
 });
 
-
+//For TouchScreen
 function onTouchStart(event) {
 	var index = $('.bar-box').index(this) + 3 * nyokiRow;
 	position[index] = event.originalEvent.touches[0].pageY;
