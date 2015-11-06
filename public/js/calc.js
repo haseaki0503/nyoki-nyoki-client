@@ -1,52 +1,112 @@
 var input      = 0,
     result     = 0,
     expression = new Array();
+    prev_value = 0;
+    prev_prev_value =0;
+    signFlg = false;
+    sign = "=";
+    prev_sign = "=";
+
+$(".reset").click(function(){
+    input      = 0,
+    result     = 0,
+    expression = new Array();
+    prev_value = 0;
+    prev_prev_value =0;
+    signFlg = false;
+    sign = "=";
+});
+
 $(".calc-button").click(function() {
   input = $(this).children('p').text();
   if ($.isNumeric(input)) {
+    console.log('num'+input);
+    if(signFlg){
+      signFlg = false;
+      result = 0;
+    }
+
+    // if(sign == "="){
+    //   result = 0;
+    // }
     input = parseInt(input);
     result = result * 10 + input;
-  }
-  else if (expression.length <= 0) {
-    expression.push(result);
   }
   else {
     switch (input) {
       case "=":
-        expression.push(result)
-        result = 0;
-        $.each(expression, function( index, value ) {
-          result += parseInt(value);
-          console.log( index + ": " + value );
-        });
-        expression = result;
+        calc();
+        signFlg = false;
+        prev_sign = sign;
+        sign = "=";
+        prev_value = 0;
         break;
       case "＋":
-        expression.push(result);
-        result = 0;
+        //prev_prev_value = prev_value;
+        calc();
+        prev_sign = sign;
+        sign = "+";
+        signFlg = true;
         break;
       case "−":
-        expression.push(-result);
-        result = 0;
+        //prev_prev_value = prev_value;
+        signFlg = true;
+        calc();
+        prev_sign = sign;
+        sign = "-";
+        signFlg = true;
         break;
       case "÷":
-        var len = expression.length;
-        if (expression[len-1] == 0) {
-          break;
-        };
-        expression[len-1] = expression[len-1] / result;
-        result = 0;
+        //prev_prev_value = prev_value;
+        signFlg = true;
+        calc();
+        sign = "/";
+        signFlg = true;
         break;
       case "×":
-        var len = expression.length;
-        expression[len-1] = expression[len-1] * result;
-        result = 0;
+        //prev_prev_value = prev_value;
+        signFlg = true;
+        calc();
+        prev_sign = sign;
+        sign = "*";
+        signFlg = true;
         break;
       default:
         console.log("Input Error: " + input);
     };
   };
   $('.result > p').text(result);
-  console.log("exp: " + expression);
-  console.log("rslt: " + result);
+  console.log("result: "+result);
+  console.log("prev: "+prev_value);
+  console.log("prev_prev_value: " + prev_prev_value);
 });
+
+function calc(){
+  switch(sign){
+    case "=":
+      if(signFlg){
+        prev_value = 0;
+      }
+      prev_value += result;
+      break;
+    case "+":
+      prev_prev_value += prev_value;
+      prev_value = result;
+      result = prev_prev_value + prev_value;
+      break;
+    case"-":
+      prev_prev_value -= prev_value;
+      prev_value = -result;
+      result = prev_prev_value + prev_value;
+     break;
+    case"*":
+      prev_prev_value
+      prev_value *= result;
+      result = prev_prev_value + prev_value;
+     break;
+    case"/":
+      prev_value /= result;
+      result = prev_prev_value + prev_value;
+     break;
+  }
+}
