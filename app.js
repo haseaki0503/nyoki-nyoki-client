@@ -11,7 +11,7 @@ server.listen(3000);
 app.use(express.static('public'));
 
 //OSC
-var oscAddr = '192.168.152.49';
+var oscAddr = '192.168.1.2';
 //var oscAddr = '127.0.0.1';
 var oscServer = new osc.Server(10001, oscAddr);
 var oscClient = new osc.Client(oscAddr, 10000);
@@ -23,27 +23,27 @@ io.sockets.on('connection', function(socket) {
   socket.on('config', function(data) {
     mode = data;
     oscClient.send('/config', data);
-    console.log('config: ' + data);
+    console.log('[Received] config: ' + data);
   });
   //graph
   socket.on('emit_graph', function(data) {
     oscClient.send('/graph', data);
-    console.log("graph: " + data);
+    console.log("[Received] graph: " + data);
   });
   //calc
   socket.on('emit_calc', function(data) {
     oscClient.send('/calc', data);
-    console.log("calc: " + data);
+    console.log("[Received] calc: " + data);
   });
   //timer
   socket.on('emit_timer', function(data) {
     oscClient.send('/timer', data);
-    console.log("timer: " + data);
+    console.log("[Received] timer: " + data);
   });
   //visualizer
   socket.on('emit_visualizer', function(data) {
     oscClient.send('/visualizer', data);
-    console.log('visualizer: ' + data);
+    console.log('[Received] visualizer: ' + data);
   });
 
   //oscServer
@@ -55,7 +55,10 @@ io.sockets.on('connection', function(socket) {
     //console.log(rinfo);
     if (addr = '/timer') {
       socket.emit('send_time', msg);
-      console.log('time: ' + msg);
+      console.log('[Sent] time: ' + msg);
     }
+    if (addr = '/graph') {
+      socket.emit('send_graph', msg);
+      console.log('[Sent] time: ' + msg);
   });
 });
