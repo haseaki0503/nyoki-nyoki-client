@@ -12,6 +12,18 @@ for (i=0; i < 9; i++) {
 	socket.emit('emit_graph', i+1 + " " + graphValue[i]);
 }
 
+//socket
+socket.on('send_graph', function (data) {
+  graphValue = data.split(" ");
+	for(i=1; i <= 3; i++) {
+		index = i + 3*nyokiRow - 1;
+		$('.bar').eq(i-1).height(graphValue[index] * maxHeight / 50);
+		$('.value-box').eq(i-1).children('p').text(graphValue[index]);
+	}
+
+  console.log('receive: ' + graphValue);
+});
+
 $('.waku').click(function(){
 	nyokiRow = $(this).index();
 	for(i=1; i <= 3; i++) {
@@ -52,7 +64,6 @@ function onTouchMove(event) {
 	//rewrite value
 	graphValue[index] = Math.round(barHeight / maxHeight * 50);
 	$('.value-box').eq(index).children('p').text(graphValue[index]);
-	//console.log(graphValue[index]);
 
 	//Send data to nyokinyoki
 	socket.emit('emit_graph', index+1 + " " + graphValue[index]);

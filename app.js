@@ -57,5 +57,9 @@ io.sockets.on('connection', function(socket) {
       socket.emit('send_time', msg);
       console.log('time: ' + msg);
     }
+    if (addr = '/graph') {
+      socket.emit('send_graph', msg);
+      console.log('time: ' + msg);
+    }
   });
 });
