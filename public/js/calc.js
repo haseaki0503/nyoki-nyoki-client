@@ -7,7 +7,7 @@ var input      = 0,
     sign = "=";
     prev_sign = "=";
 
-$(".reset").click(function(){
+$(".reset").click(function() {
     input      = 0,
     result     = 0,
     expression = new Array();
@@ -15,6 +15,7 @@ $(".reset").click(function(){
     prev_prev_value =0;
     signFlg = false;
     sign = "=";
+    $('.result > p').text(result);
 });
 
 $(".calc-button").click(function() {
@@ -42,28 +43,35 @@ $(".calc-button").click(function() {
         prev_value = 0;
         break;
       case "＋":
+      if(!signFlg){
         //prev_prev_value = prev_value;
         calc();
         prev_sign = sign;
         sign = "+";
         signFlg = true;
+      }
         break;
       case "−":
+      if(!signFlg){
         //prev_prev_value = prev_value;
         signFlg = true;
         calc();
         prev_sign = sign;
         sign = "-";
         signFlg = true;
+      }
         break;
       case "÷":
+      if(!signFlg){
         //prev_prev_value = prev_value;
         signFlg = true;
         calc();
         sign = "/";
         signFlg = true;
+      }
         break;
       case "×":
+      if(!signFlg){
         //prev_prev_value = prev_value;
         signFlg = true;
         calc();
@@ -71,6 +79,7 @@ $(".calc-button").click(function() {
         sign = "*";
         signFlg = true;
         break;
+      }
       default:
         console.log("Input Error: " + input);
     };
@@ -95,17 +104,17 @@ function calc(){
       result = prev_prev_value + prev_value;
       break;
     case"-":
-      prev_prev_value -= prev_value;
+      prev_prev_value += prev_value;
       prev_value = -result;
       result = prev_prev_value + prev_value;
      break;
     case"*":
-      prev_prev_value
       prev_value *= result;
       result = prev_prev_value + prev_value;
      break;
     case"/":
       prev_value /= result;
+      prev_value = Math.round(prev_value);
       result = prev_prev_value + prev_value;
      break;
   }
