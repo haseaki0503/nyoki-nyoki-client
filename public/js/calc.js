@@ -6,8 +6,9 @@ var input      = 0,
     signFlg = false;
     sign = "=";
     prev_sign = "=";
+var socket = io.connect();
 
-$(".reset").click(function(){
+$(".reset > p").click(function(){
     input      = 0,
     result     = 0,
     expression = new Array();
@@ -15,6 +16,8 @@ $(".reset").click(function(){
     prev_prev_value =0;
     signFlg = false;
     sign = "=";
+    $('.result > p').text(result);
+    socket.emit('emit_calc', result);
 });
 
 $(".calc-button").click(function() {
@@ -40,36 +43,50 @@ $(".calc-button").click(function() {
         prev_sign = sign;
         sign = "=";
         prev_value = 0;
+        if(result <= 50) {
+          socket.emit('emit_calc', result);
+        }
+        else {
+          alert("ニョ木ニョ木で表現できる数値を超えています")
+        }
         break;
       case "＋":
-        //prev_prev_value = prev_value;
-        calc();
-        prev_sign = sign;
-        sign = "+";
-        signFlg = true;
+        if(!signFlg){
+          //prev_prev_value = prev_value;
+          calc();
+          prev_sign = sign;
+          sign = "+";
+          signFlg = true;
+        }
         break;
       case "−":
-        //prev_prev_value = prev_value;
-        signFlg = true;
-        calc();
-        prev_sign = sign;
-        sign = "-";
-        signFlg = true;
+        if(!signFlg){
+          //prev_prev_value = prev_value;
+          signFlg = true;
+          calc();
+          prev_sign = sign;
+          sign = "-";
+          signFlg = true;
+        }
         break;
       case "÷":
-        //prev_prev_value = prev_value;
-        signFlg = true;
-        calc();
-        sign = "/";
-        signFlg = true;
+        if(!signFlg){
+          //prev_prev_value = prev_value;
+          signFlg = true;
+          calc();
+          sign = "/";
+          signFlg = true;
+        }
         break;
       case "×":
-        //prev_prev_value = prev_value;
-        signFlg = true;
-        calc();
-        prev_sign = sign;
-        sign = "*";
-        signFlg = true;
+        if(!signFlg){
+          //prev_prev_value = prev_value;
+          signFlg = true;
+          calc();
+          prev_sign = sign;
+          sign = "*";
+          signFlg = true;
+        }
         break;
       default:
         console.log("Input Error: " + input);
@@ -95,7 +112,7 @@ function calc(){
       result = prev_prev_value + prev_value;
       break;
     case"-":
-      prev_prev_value -= prev_value;
+      prev_prev_value += prev_value;
       prev_value = -result;
       result = prev_prev_value + prev_value;
      break;
