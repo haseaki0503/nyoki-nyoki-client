@@ -11,8 +11,9 @@ server.listen(3000);
 app.use(express.static('public'));
 
 //OSC
-var oscAddr = '192.168.152.49';
+//var oscAddr = '192.168.152.49';
 //var oscAddr = '127.0.0.1';
+var oscAddr = '192.168.1.2';
 var oscServer = new osc.Server(10001, oscAddr);
 var oscClient = new osc.Client(oscAddr, 10000);
 
