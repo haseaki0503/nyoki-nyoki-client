@@ -17,7 +17,9 @@ $(".reset > p").click(function(){
     signFlg = false;
     sign = "=";
     $('.result > p').text(result);
+
     socket.emit('emit_calc', result);
+
 });
 
 $(".calc-button").click(function() {
@@ -88,6 +90,7 @@ $(".calc-button").click(function() {
           signFlg = true;
         }
         break;
+      }
       default:
         console.log("Input Error: " + input);
     };
@@ -117,12 +120,12 @@ function calc(){
       result = prev_prev_value + prev_value;
      break;
     case"*":
-      prev_prev_value
       prev_value *= result;
       result = prev_prev_value + prev_value;
      break;
     case"/":
       prev_value /= result;
+      prev_value = Math.round(prev_value);
       result = prev_prev_value + prev_value;
      break;
   }
