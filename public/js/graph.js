@@ -11,6 +11,21 @@ for (i=0; i < 9; i++) {
 	graphValue[i] = 40;
 	socket.emit('emit_graph', i+1 + " " + graphValue[i]);
 }
+maxHeight = $('.bar-box').height();
+$('.waku').removeClass("active");
+$('.waku:nth-child(1)').addClass('active');
+
+//socket
+socket.on('send_graph', function (data) {
+  graphValue = data.split(" ");
+	for(i=1; i <= 3; i++) {
+		index = i + 3*nyokiRow - 1;
+		$('.bar').eq(i-1).height(graphValue[index] * maxHeight / 50);
+		$('.value-box').eq(i-1).children('p').text(graphValue[index]);
+	}
+
+  console.log('receive: ' + graphValue);
+});
 
 //socket
 socket.on('send_graph', function (data) {
@@ -26,6 +41,10 @@ socket.on('send_graph', function (data) {
 //change bar-group
 $('.waku').click(function(){
 	nyokiRow = $(this).index();
+
+	$('.waku').removeClass("active");
+	$(this).addClass('active');
+
 	for(i=1; i <= 3; i++) {
 		index = i + 3*nyokiRow - 1;
 		$('.bar').eq(i-1).height(graphValue[index] * maxHeight / 50);
@@ -39,7 +58,6 @@ $('.waku').click(function(){
 function onTouchStart(event) {
 	var index = $('.bar-box').index(this) + 3 * nyokiRow;
 	position[index] = event.originalEvent.touches[0].pageY;
-	maxHeight = $(this).height();
 }
 
 function onTouchMove(event) {

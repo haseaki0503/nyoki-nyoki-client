@@ -48,17 +48,22 @@ io.sockets.on('connection', function(socket) {
 
   //oscServer
   var msg, addr;
+  var prevMsg = null;
   oscServer.on('message', function(obj, rinfo) {
     msg = obj[2][1];
     addr = obj[2][0];
     console.log('[Incoming msg] ' + 'address:' + addr + ' msg:' + msg);
     //console.log(rinfo);
-    if (addr = '/timer') {
-      socket.emit('send_time', msg);
-      console.log('[Sent] time: ' + msg);
+    if (msg !== prevMsg){
+      if (addr = '/timer') {
+        socket.emit('send_time', msg);
+        console.log('time: ' + msg);
+      }
+      if (addr = '/graph') {
+        socket.emit('send_graph', msg);
+        console.log('time: ' + msg);
+      }
     }
-    if (addr = '/graph') {
-      socket.emit('send_graph', msg);
-      console.log('[Sent] time: ' + msg);
+    prevMsg = msg;
   });
 });
